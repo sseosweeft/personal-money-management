@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Amplop Belanja</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Dompet Ibu</h1>
+    <p>Catat pemasukan dan pengeluaranmu dengan rapi</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Catat transaksi</h2>
+      <form id="formTransaksi">
+        <label>Tanggal <input type="date" id="tanggal"></label>
+        <label>Jenis
+          <select id="jenis">
+            <option value="pengeluaran">Pengeluaran</option>
+            <option value="pemasukan">Pemasukan</option>
+          </select>
+        </label>
+        <label>Kategori
+          <select id="kategori">
+            <option>Belanja Dapur</option>
+            <option>Listrik &amp; Air</option>
+            <option>Anak &amp; Sekolah</option>
+            <option>Transportasi</option>
+            <option>Gaji</option>
+            <option>Jatah Bulanan dari Suami</option>
+            <option>Lainnya</option>
+          </select>
+        </label>
+        <label>Nominal (Rp) <input type="number" id="nominal" placeholder="25000"></label>
+        <label class="lebar">Catatan (opsional) <input type="text" id="catatan" placeholder="Sayur di pasar"></label>
+        <button type="submit">Simpan transaksi</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Riwayat</h2>
+      <ul id="daftarTransaksi"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
