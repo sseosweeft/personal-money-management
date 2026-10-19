@@ -1,3 +1,4 @@
+const KUNCI_TRANSAKSI = "transaksi";
 let transaksi = [];
 
 function formatRupiah(angka) {
@@ -9,6 +10,19 @@ function formatRupiah(angka) {
 function tanggalHariIni() {
   const lokal = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
   return lokal.toISOString().slice(0, 10);
+}
+
+// W4: data persisten
+function muatData() {
+  try {
+    transaksi = JSON.parse(localStorage.getItem(KUNCI_TRANSAKSI)) || [];
+  } catch (e) {
+    transaksi = [];
+  }
+}
+
+function simpanData() {
+  localStorage.setItem(KUNCI_TRANSAKSI, JSON.stringify(transaksi));
 }
 
 function buatEl(tag, teks, kelas) {
@@ -54,6 +68,7 @@ function tambahTransaksi(event) {
     nominal: Number(document.getElementById("nominal").value),
     catatan: document.getElementById("catatan").value.trim()
   });
+  simpanData();
   document.getElementById("nominal").value = "";
   document.getElementById("catatan").value = "";
   renderDaftar();
@@ -63,9 +78,11 @@ function tambahTransaksi(event) {
 function hapusTransaksi(id) {
   if (!confirm("Hapus transaksi ini?")) return;
   transaksi = transaksi.filter(t => t.id !== id);
+  simpanData();
   renderDaftar();
 }
 
 document.getElementById("formTransaksi").addEventListener("submit", tambahTransaksi);
+muatData();
 document.getElementById("tanggal").value = tanggalHariIni();
 renderDaftar();
