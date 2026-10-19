@@ -13,9 +13,15 @@
   </header>
 
   <main>
+    <section class="ringkasan" aria-label="Ringkasan keuangan">
+      <div><span>Pemasukan</span><strong id="totalMasuk">Rp0</strong></div>
+      <div><span>Pengeluaran</span><strong id="totalKeluar">Rp0</strong></div>
+      <div><span>Saldo</span><strong id="saldo">Rp0</strong></div>
+    </section>
+
     <section>
       <h2>Catat transaksi</h2>
-      <form id="formTransaksi">
+      <form id="formTransaksi" novalidate>
         <label>Tanggal <input type="date" id="tanggal"></label>
         <label>Jenis
           <select id="jenis">
@@ -29,13 +35,11 @@
             <option>Listrik &amp; Air</option>
             <option>Anak &amp; Sekolah</option>
             <option>Transportasi</option>
-            <option>Gaji</option>
-            <option>Jatah Bulanan dari Suami</option>
-            <option>Lainnya</option>
           </select>
         </label>
         <label>Nominal (Rp) <input type="number" id="nominal" placeholder="25000"></label>
         <label class="lebar">Catatan (opsional) <input type="text" id="catatan" placeholder="Sayur di pasar"></label>
+        <p id="pesanError" class="error" role="alert"></p>
         <button type="submit">Simpan transaksi</button>
       </form>
     </section>

@@ -1,5 +1,6 @@
 const KUNCI_TRANSAKSI = "transaksi";
 let transaksi = [];
+const elError = document.getElementById("pesanError");
 
 function formatRupiah(angka) {
   return new Intl.NumberFormat("id-ID", {
@@ -57,21 +58,61 @@ function renderDaftar() {
   });
 }
 
+// W5: ringkasan
+function hitungRingkasan() {
+  const masuk = transaksi.filter(t => t.jenis === "pemasukan").reduce((n, t) => n + t.nominal, 0);
+  const keluar = transaksi.filter(t => t.jenis === "pengeluaran").reduce((n, t) => n + t.nominal, 0);
+  return { masuk, keluar, saldo: masuk - keluar };
+}
+
+function renderRingkasan() {
+  const r = hitungRingkasan();
+  document.getElementById("totalMasuk").textContent = formatRupiah(r.masuk);
+  document.getElementById("totalKeluar").textContent = formatRupiah(r.keluar);
+  document.getElementById("saldo").textContent = formatRupiah(r.saldo);
+}
+
+function renderSemua() {
+  renderRingkasan();
+  renderDaftar();
+}
+
+function tampilkanError(pesan) {
+  elError.textContent = pesan;
+}
+
 // W1: tambah transaksi
 function tambahTransaksi(event) {
   event.preventDefault();
+  const tanggal = document.getElementById("tanggal").value;
+  const inputNominal = document.getElementById("nominal");
+  const nominal = Number(inputNominal.value);
+  inputNominal.classList.remove("salah");
+
+  // W6: validasi
+  if (!tanggal) {
+    tampilkanError("Tanggal wajib diisi.");
+    return;
+  }
+  if (!(nominal > 0)) {
+    tampilkanError("Nominal harus lebih dari 0.");
+    inputNominal.classList.add("salah");
+    return;
+  }
+  tampilkanError("");
+
   transaksi.push({
     id: Date.now(),
-    tanggal: document.getElementById("tanggal").value,
+    tanggal: tanggal,
     jenis: document.getElementById("jenis").value,
     kategori: document.getElementById("kategori").value,
-    nominal: Number(document.getElementById("nominal").value),
+    nominal: nominal,
     catatan: document.getElementById("catatan").value.trim()
   });
   simpanData();
   document.getElementById("nominal").value = "";
   document.getElementById("catatan").value = "";
-  renderDaftar();
+  renderSemua();
 }
 
 // W3: hapus dengan konfirmasi
@@ -79,10 +120,10 @@ function hapusTransaksi(id) {
   if (!confirm("Hapus transaksi ini?")) return;
   transaksi = transaksi.filter(t => t.id !== id);
   simpanData();
-  renderDaftar();
+  renderSemua();
 }
 
 document.getElementById("formTransaksi").addEventListener("submit", tambahTransaksi);
 muatData();
 document.getElementById("tanggal").value = tanggalHariIni();
-renderDaftar();
+renderSemua();
