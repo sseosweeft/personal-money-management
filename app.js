@@ -13,6 +13,7 @@ let amplop = [];
 
 const elJenis = document.getElementById("jenis");
 const elKategori = document.getElementById("kategori");
+const elFilter = document.getElementById("filterKategori");
 const elError = document.getElementById("pesanError");
 const elErrorAmplop = document.getElementById("pesanErrorAmplop");
 
@@ -108,7 +109,9 @@ function renderAmplop() {
 function renderDaftar() {
   const daftar = document.getElementById("daftarTransaksi");
   daftar.innerHTML = "";
-  const tampil = [...transaksi]
+  const filter = elFilter.value;
+  const tampil = transaksi
+    .filter(t => !filter || t.kategori === filter)
     .sort((a, b) => b.tanggal.localeCompare(a.tanggal) || b.id - a.id);
 
   if (tampil.length === 0) {
@@ -134,6 +137,13 @@ function isiKategori() {
   const pilihan = elJenis.value === "pengeluaran" ? amplop.map(a => a.nama) : KATEGORI_MASUK;
   elKategori.innerHTML = "";
   pilihan.forEach(nama => elKategori.appendChild(new Option(nama, nama)));
+}
+
+function isiFilter() {
+  const semua = [...amplop.map(a => a.nama), ...KATEGORI_MASUK];
+  elFilter.innerHTML = "";
+  elFilter.appendChild(new Option("Semua kategori", ""));
+  semua.forEach(nama => elFilter.appendChild(new Option(nama, nama)));
 }
 
 function renderSemua() {
@@ -200,6 +210,42 @@ function ubahJatah(id, nilaiBaru) {
   renderSemua();
 }
 
+// ---------- Bonus: ekspor dan impor JSON ----------
+function eksporData() {
+  const isi = JSON.stringify({ transaksi: transaksi, amplop: amplop }, null, 2);
+  const url = URL.createObjectURL(new Blob([isi], { type: "application/json" }));
+  const tautan = document.createElement("a");
+  tautan.href = url;
+  tautan.download = "dompet-ibu-backup.json";
+  tautan.click();
+  URL.revokeObjectURL(url);
+}
+
+function imporData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const pembaca = new FileReader();
+  pembaca.onload = () => {
+    try {
+      const data = JSON.parse(pembaca.result);
+      if (!Array.isArray(data.transaksi) || !Array.isArray(data.amplop)) {
+        throw new Error("format salah");
+      }
+      transaksi = data.transaksi;
+      amplop = data.amplop;
+      simpanData();
+      tampilkanError("");
+      isiKategori();
+      isiFilter();
+      renderSemua();
+    } catch (e) {
+      tampilkanError("File tidak valid. Pilih file JSON hasil ekspor aplikasi ini.");
+    }
+  };
+  pembaca.readAsText(file);
+  event.target.value = "";
+}
+
 // Tambah amplop baru
 function tambahAmplop(event) {
   event.preventDefault();
@@ -227,6 +273,7 @@ function tambahAmplop(event) {
   document.getElementById("namaAmplop").value = "";
   document.getElementById("jatahAmplop").value = "";
   isiKategori();
+  isiFilter();
   renderSemua();
 }
 
@@ -234,8 +281,13 @@ function tambahAmplop(event) {
 document.getElementById("formTransaksi").addEventListener("submit", tambahTransaksi);
 document.getElementById("formAmplop").addEventListener("submit", tambahAmplop);
 elJenis.addEventListener("change", isiKategori);
+elFilter.addEventListener("change", renderDaftar);
+document.getElementById("btnEkspor").addEventListener("click", eksporData);
+document.getElementById("btnImpor").addEventListener("click", () => document.getElementById("fileImpor").click());
+document.getElementById("fileImpor").addEventListener("change", imporData);
 
 muatData();
 document.getElementById("tanggal").value = tanggalHariIni();
 isiKategori();
+isiFilter();
 renderSemua();

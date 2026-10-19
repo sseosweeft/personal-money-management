@@ -74,6 +74,8 @@ input.salah { border-color: var(--merah); }
 
 .baris-judul { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .baris-judul h2 { margin: 0; }
+.aksi-data { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.aksi-data button { padding: 8px 14px; }
 ul { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
 li { background: var(--card); border-radius: 8px; padding: 10px 14px; display: grid; grid-template-columns: 1fr 130px auto; align-items: center; gap: 10px; }
 li.kosong { display: block; }

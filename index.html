@@ -49,7 +49,15 @@
     </section>
 
     <section>
-      <h2>Riwayat</h2>
+      <div class="baris-judul">
+        <h2>Riwayat</h2>
+        <select id="filterKategori" aria-label="Filter kategori"></select>
+      </div>
+      <div class="aksi-data">
+        <button type="button" id="btnEkspor">Ekspor data (JSON)</button>
+        <button type="button" id="btnImpor">Impor data</button>
+        <input type="file" id="fileImpor" accept="application/json" hidden>
+      </div>
       <ul id="daftarTransaksi"></ul>
     </section>
   </main>
