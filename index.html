@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Amplop Belanja</title>
+  <title>Dompet Ibu</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,6 +20,17 @@
     </section>
 
     <section>
+      <h2>Amplop bulan ini</h2>
+      <div id="daftarAmplop" class="amplop-grid"></div>
+      <form id="formAmplop" novalidate>
+        <label>Nama amplop baru <input type="text" id="namaAmplop" placeholder="Arisan"></label>
+        <label>Jatah (Rp) <input type="number" id="jatahAmplop" min="0" placeholder="200000"></label>
+        <p id="pesanErrorAmplop" class="error" role="alert"></p>
+        <button type="submit">Tambah amplop</button>
+      </form>
+    </section>
+
+    <section>
       <h2>Catat transaksi</h2>
       <form id="formTransaksi" novalidate>
         <label>Tanggal <input type="date" id="tanggal"></label>
@@ -29,15 +40,8 @@
             <option value="pemasukan">Pemasukan</option>
           </select>
         </label>
-        <label>Kategori
-          <select id="kategori">
-            <option>Belanja Dapur</option>
-            <option>Listrik &amp; Air</option>
-            <option>Anak &amp; Sekolah</option>
-            <option>Transportasi</option>
-          </select>
-        </label>
-        <label>Nominal (Rp) <input type="number" id="nominal" placeholder="25000"></label>
+        <label>Kategori <select id="kategori"></select></label>
+        <label>Nominal (Rp) <input type="number" id="nominal" min="1" placeholder="25000"></label>
         <label class="lebar">Catatan (opsional) <input type="text" id="catatan" placeholder="Sayur di pasar"></label>
         <p id="pesanError" class="error" role="alert"></p>
         <button type="submit">Simpan transaksi</button>
